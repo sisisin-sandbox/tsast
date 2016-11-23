@@ -6,7 +6,13 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "f5ab2df94e1aabf0fc6d783ad01c4c4671760627"
+      "commit": "32515508cc6cadd4b45863a24bec6a032be6da03"
+    },
+    "mkdirp/mkdirp.d.ts": {
+      "commit": "32515508cc6cadd4b45863a24bec6a032be6da03"
+    },
+    "recursive-readdir/recursive-readdir.d.ts": {
+      "commit": "32515508cc6cadd4b45863a24bec6a032be6da03"
     }
   }
 }

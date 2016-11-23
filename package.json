@@ -7,12 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/index.js",
     "build": "tsc -p ./src",
-    "watch": "tsc -p ./src -w"
+    "watch": "tsc -p ./src -w",
+    "clean": "rm -rf dist/s1.ts dist/d"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "mkdirp": "^0.5.1",
+    "recursive-readdir": "^2.1.0",
     "tsd": "^0.6.5",
     "typescript": "^1.8.10"
   }
