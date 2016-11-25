@@ -5,8 +5,9 @@ import * as mkdirp from 'mkdirp';
 import * as recursiveReaddir from 'recursive-readdir';
 import * as ts from 'typescript';
 
-const srcDir = 'sample';
-const distDir = 'dist';
+const srcDir = 'front_src/main/ts';
+const distDir = 'out';
+const tsconfig = require('../sample/tsconfig.json');
 
 function readFileAsync(fileName: string) { return new Promise<Buffer>(resolve => fs.readFile(fileName, (err, data) => resolve(data))); }
 function writeFileAsync(fileName: string, data: string) {
@@ -121,7 +122,7 @@ export function updaterFactory(cb: (file: ts.SourceFile) => Promise<ts.SourceFil
  */
 export const getDeclarationMap = async () => {
   const files = await getTargetDirList();
-  const program = ts.createProgram(files, require('../sample/tsconfig.json'))
+  const program = ts.createProgram(files, tsconfig);
   const checker = program.getTypeChecker();
   const classMap = new Map<string, string>();
 

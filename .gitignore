@@ -7,3 +7,5 @@ typings/
 
 dist/
 
+ts/
+out/
