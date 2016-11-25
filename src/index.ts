@@ -4,7 +4,6 @@
 import {updateAll, removeNamespace, updaterFactory} from './utils';
 import {createTypeMap} from './create-type-map';
 (async () => {
-  await createTypeMap();
   await updateAll(removeNamespace);
 })().catch(e => console.log(e));
 // updaterFactory(removeNamespace)('./sample/s1.ts');
