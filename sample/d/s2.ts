@@ -6,7 +6,6 @@ namespace app {
       console.log(S3.s7);
     }
   }
-  export interface S3 { }
 
-  export const s4 = 's4';
+  export const s4 = 's4', ss = '';
 }
