@@ -17,21 +17,44 @@ function getTypeRefs(n: ts.SourceFile, declarationMap: { [key: string]: string }
   function visit(node: ts.Node) {
     switch (node.kind) {
       case ts.SyntaxKind.TypeReference:
-        const typeName = (<ts.TypeReferenceNode>node).typeName.getText();
-        const fileName = declarationMap[typeName];
-        if (!fileName) break;
-        if (targetFileName === fileName) break;
-
-        const typeRefSet = typeRefMap.get(fileName);
-
-        if (typeRefSet) {
-          typeRefSet.add(typeName)
-          typeRefMap.set(fileName, typeRefSet)
-        } else {
-          typeRefMap.set(fileName, new Set().add(typeName));
-        }
+        setTypeRefMap((<ts.TypeReferenceNode>node).typeName.getText());
+        break;
+      case ts.SyntaxKind.HeritageClause:
+        setTypeRefMap(getIdentifierFromHeritageClause(node).getText());
+        break;
     }
     ts.forEachChild(node, visit);
+  }
+  function setTypeRefMap(typeName: string) {
+    const fileName = declarationMap[typeName];
+    if (!fileName) return;
+    if (targetFileName === fileName) return;
+
+    const typeRefSet = typeRefMap.get(fileName);
+
+    if (typeRefSet) {
+      typeRefSet.add(typeName)
+      typeRefMap.set(fileName, typeRefSet)
+    } else {
+      typeRefMap.set(fileName, new Set().add(typeName));
+    }
+  }
+}
+
+function getIdentifierFromHeritageClause(n: ts.Node) {
+  let idt: ts.Identifier;
+  ts.forEachChild(n, visit);
+  return idt;
+  function visit(node: ts.Node) {
+    switch (node.kind) {
+      case ts.SyntaxKind.Identifier:
+        idt = <ts.Identifier>node;
+        break;
+
+      default:
+        ts.forEachChild(node, visit);
+        break;
+    }
   }
 }
 

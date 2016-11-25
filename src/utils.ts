@@ -22,7 +22,7 @@ export function writeFileAsync(fileName: string, data: string) {
     return new Promise<Buffer>(resolve => fs.writeFile(fileName, data, (err) => resolve()));
   });
 }
-export function getTargetDirList() { return new Promise<string[]>(resolve => recursiveReaddir(srcDir, ['*.json'], (err: any, files: string[]) => resolve(files))); }
+export function getTargetDirList(target: string = srcDir) { return new Promise<string[]>(resolve => recursiveReaddir(target, ['*.json'], (err: any, files: string[]) => resolve(files))); }
 
 function changeText(
   sourceFile: ts.SourceFile,
@@ -66,7 +66,7 @@ export async function removeNamespace(file: ts.SourceFile) {
 
 export async function updateAll(cb: (file: ts.SourceFile) => Promise<ts.SourceFile>) {
   console.log('===================================================================')
-  const files = await getTargetDirList();
+  const files = await getTargetDirList(srcDir);
   files.forEach(updaterFactory(cb));
 }
 

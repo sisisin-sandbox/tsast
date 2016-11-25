@@ -7,5 +7,7 @@ namespace app {
     }
   }
 
+  export class S5 implements IS { }
+  export class S8 extends S9 { }
   export const s4 = 's4', ss = '';
 }

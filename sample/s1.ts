@@ -13,4 +13,6 @@ namespace app {
   }
 
   class Sx { }
+  export interface IS { }
+  export class S9 { }
 }
