@@ -1,6 +1,6 @@
 import * as ts from 'typescript';
 import {getTargetDirList, writeFileAsync, constant} from './utils';
-const {typeMapDistPath, tsconfigPath} = constant;
+const {typeMapDistPath, tsconfigPath, tsProjectDir} = constant;
 const tsconfig = require(tsconfigPath);
 
 /**
@@ -8,7 +8,7 @@ const tsconfig = require(tsconfigPath);
  * todo string Enumっぽく使ってるnamespaceの対処(ReportPeriod.tsなど)
  */
 const getDeclarationMap = async () => {
-  const files = await getTargetDirList();
+  const files = await getTargetDirList(tsProjectDir);
   const program = ts.createProgram(files, tsconfig);
   const checker = program.getTypeChecker();
   let classMap: { [key: string]: string } = {};
@@ -58,3 +58,5 @@ export async function createTypeMap() {
   const declarationMap = await getDeclarationMap();
   writeFileAsync(typeMapDistPath, JSON.stringify(declarationMap, null, ' '));
 }
+
+createTypeMap();

@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as ts from 'typescript';
 
 export function importBuilder(file: ts.SourceFile) {
-  const declarationMap = require('../out/type-map.json');
+  const declarationMap = require('../dist/type-map.json');
   const typeRefs = getTypeRefs(file, declarationMap);
   return createImport(file.fileName, typeRefs);
 }

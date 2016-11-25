@@ -8,7 +8,8 @@ import {importBuilder} from './import-builder';
 
 export const constant = {
   tsconfigPath: '../sample/tsconfig.json',
-  typeMapDistPath: './out/type-map.json',
+  typeMapDistPath: './dist/type-map.json',
+  tsProjectDir: 'sample',
   srcDir: 'sample',
   distDir: 'out'
 };
@@ -22,7 +23,7 @@ export function writeFileAsync(fileName: string, data: string) {
     return new Promise<Buffer>(resolve => fs.writeFile(fileName, data, (err) => resolve()));
   });
 }
-export function getTargetDirList(target: string = srcDir) { return new Promise<string[]>(resolve => recursiveReaddir(target, ['*.json'], (err: any, files: string[]) => resolve(files))); }
+export function getTargetDirList(target: string) { return new Promise<string[]>(resolve => recursiveReaddir(target, ['*.json'], (err: any, files: string[]) => resolve(files))); }
 
 function changeText(
   sourceFile: ts.SourceFile,
