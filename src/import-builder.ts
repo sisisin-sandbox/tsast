@@ -91,7 +91,7 @@ function getIdentifierFromHeritageClause(n: ts.Node) {
 function createImport(srcFilePath: string, map: Map<string, Set<string>>) {
   return Array.from(map.entries())
     .map(([fileName, typeSet]) => {
-      const relativePath = path.relative(path.dirname(srcFilePath), fileName);
+      const relativePath = path.relative(path.dirname(srcFilePath), fileName.slice(0, -3));
       const typeList = Array.from(typeSet).join(', ');
       return `import { ${typeList} } from './${relativePath}';`;
     }).join('\n');
