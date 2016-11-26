@@ -1,10 +1,40 @@
 import * as path from 'path';
 import * as ts from 'typescript';
 
-export function importBuilder(file: ts.SourceFile) {
+import { readFileAsync } from './utils';
+
+export function importBuilder(file: ts.SourceFile): string {
   const declarationMap = require('../dist/type-map.json');
   const typeRefs = getTypeRefs(file, declarationMap);
   return createImport(file.fileName, typeRefs);
+}
+
+export async function buildTypeRefsFromModule(targetFileName: string) {
+  const reg = /^.*, (.*)\);$/;
+  const declarationMap = require('../dist/type-map.json');
+  const typeRefMap = new Map<string, Set<string>>();
+  const lines = (await readFileAsync(targetFileName)).toString().split('\n');
+  lines.forEach(line => {
+    setTypeRefMap(line.replace(reg, '$1'));
+  });
+
+  return createImport(targetFileName, typeRefMap);
+
+  function setTypeRefMap(typeName: string) {
+    const fileName = declarationMap[typeName];
+    if (!fileName) return;
+    if (targetFileName === fileName) return;
+
+    const typeRefSet = typeRefMap.get(fileName);
+
+    if (typeRefSet) {
+      typeRefSet.add(typeName)
+      typeRefMap.set(fileName, typeRefSet)
+    } else {
+      typeRefMap.set(fileName, new Set().add(typeName));
+    }
+  }
+
 }
 
 function getTypeRefs(n: ts.SourceFile, declarationMap: { [key: string]: string }) {

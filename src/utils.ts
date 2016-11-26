@@ -11,16 +11,19 @@ export const constant = {
   typeMapDistPath: './dist/type-map.json',
   tsProjectDir: 'sample',
   srcDir: 'sample',
+  collectDir: 'sample2',
   distDir: 'out'
 };
 const {srcDir, distDir, tsconfigPath, typeMapDistPath} = constant;
-const tsconfig = require(tsconfigPath);
 
-function readFileAsync(fileName: string) { return new Promise<Buffer>(resolve => fs.readFile(fileName, (err, data) => resolve(data))); }
+export function readFileAsync(fileName: string) { return new Promise<Buffer>(resolve => fs.readFile(fileName, (err, data) => resolve(data))); }
 export function writeFileAsync(fileName: string, data: string) {
   const dir = path.dirname(fileName);
-  mkdirp(dir, (err, made) => {
-    return new Promise<Buffer>(resolve => fs.writeFile(fileName, data, (err) => resolve()));
+  return new Promise<Buffer>((resolve, reject) => {
+    mkdirp(dir, (err, made) => {
+      if (err) reject(err);
+      fs.writeFile(fileName, data, (err) => err ? reject(err) : resolve());
+    });
   });
 }
 export function getTargetDirList(target: string) { return new Promise<string[]>(resolve => recursiveReaddir(target, ['*.json'], (err: any, files: string[]) => resolve(files))); }
