@@ -14,9 +14,11 @@ const reg = /^.*(angular\.module.*$)/g;
     const lines = (await readFileAsync(file)).toString().split('\n');
     if (lines.filter(line => reg.test(line)).length === 0) continue;
 
-    moduleStatement.push(lines.find(line => reg.test(line)));
-    await writeFileAsync(file, lines.filter(line => !reg.test(line)).join('\n'));
+    const isModuleStatement = (line: string) => line.indexOf('angular.module') > -1;
+    moduleStatement.push(...lines.filter(isModuleStatement));
+    await writeFileAsync(file, lines.filter(line => !isModuleStatement(line)).join('\n'));
   }
+
   await writeFileAsync(appModule, moduleStatement.join('\n'));
   const importStatement = await buildTypeRefsFromModule(appModule);
   await writeFileAsync(appModule, `${importStatement}
